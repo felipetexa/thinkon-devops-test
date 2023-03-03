@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: '1'
+  creationTimestamp: '2023-03-03T23:47:08Z'
+  generation: 2
+  labels:
+    app: user-api
+  name: user-api
+  namespace: default
+  resourceVersion: '91892'
+  uid: af75c125-5529-4889-917c-86df088a3cec
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 3
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: user-api
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: user-api
+    spec:
+      containers:
+        - image: felipetexa/user-api:0.0.1.RELEASE
+          imagePullPolicy: IfNotPresent
+          name: user-api
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 3
+  conditions:
+    - lastTransitionTime: '2023-03-03T23:47:08Z'
+      lastUpdateTime: '2023-03-03T23:47:10Z'
+      message: ReplicaSet "user-api-7dfddd4564" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: 'True'
+      type: Progressing
+    - lastTransitionTime: '2023-03-03T23:47:56Z'
+      lastUpdateTime: '2023-03-03T23:47:56Z'
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: 'True'
+      type: Available
+  observedGeneration: 2
+  readyReplicas: 3
+  replicas: 3
+  updatedReplicas: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    cloud.google.com/neg: '{"ingress":true}'
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{"cloud.google.com/neg":"{\"ingress\":true}"},"creationTimestamp":"2023-03-03T22:37:47Z","finalizers":["service.kubernetes.io/load-balancer-cleanup"],"labels":{"app":"user-api"},"name":"user-api","namespace":"default","resourceVersion":"57218","uid":"2b77a92a-9327-48b7-804e-00a34e2d7d4a"},"spec":{"allocateLoadBalancerNodePorts":true,"clusterIP":"10.36.8.244","clusterIPs":["10.36.8.244"],"externalTrafficPolicy":"Cluster","internalTrafficPolicy":"Cluster","ipFamilies":["IPv4"],"ipFamilyPolicy":"SingleStack","ports":[{"nodePort":31247,"port":3000,"protocol":"TCP","targetPort":3000}],"selector":{"app":"user-api"},"sessionAffinity":"None","type":"LoadBalancer"},"status":{"loadBalancer":{"ingress":[{"ip":"34.71.87.230"}]}}}
+  creationTimestamp: '2023-03-03T22:37:47Z'
+  finalizers:
+    - service.kubernetes.io/load-balancer-cleanup
+  labels:
+    app: user-api
+  name: user-api
+  namespace: default
+  resourceVersion: '71782'
+  uid: 2b77a92a-9327-48b7-804e-00a34e2d7d4a
+spec:
+  allocateLoadBalancerNodePorts: true
+  clusterIP: 10.36.8.244
+  clusterIPs:
+    - 10.36.8.244
+  externalTrafficPolicy: Cluster
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+    - nodePort: 31247
+      port: 3000
+      protocol: TCP
+      targetPort: 3000
+  selector:
+    app: user-api
+  sessionAffinity: None
+  type: LoadBalancer
+status:
+  loadBalancer:
+    ingress:
+      - ip: 34.71.87.230
