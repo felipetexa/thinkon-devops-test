@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/felipetexa/thinkon-devops-test/issues"
   },
-  "homepage": "https://github.com/felipetexa/thinkon-devops-test#readme"
+  "homepage": "https://github.com/felipetexa/thinkon-devops-test#readme",
+  "devDependencies": {
+    "casual": "^1.6.2",
+    "json-server": "^0.17.2"
+  }
 }
