@@ -1,0 +1,23 @@
+{
+  "name": "thinkon-devops-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/felipetexa/thinkon-devops-test.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/felipetexa/thinkon-devops-test/issues"
+  },
+  "homepage": "https://github.com/felipetexa/thinkon-devops-test#readme",
+  "devDependencies": {
+    "casual": "^1.6.2",
+    "json-server": "^0.17.2"
+  }
+}
