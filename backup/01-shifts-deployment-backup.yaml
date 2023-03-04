@@ -1,0 +1,146 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: '1'
+  creationTimestamp: '2023-03-03T23:46:49Z'
+  generation: 2
+  labels:
+    app: shift-api
+  name: shift-api
+  namespace: default
+  resourceVersion: '92566'
+  uid: 62c021d8-7098-43a0-8fc9-5c94274d5b96
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 3
+  minReadySeconds: 45
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: shift-api
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: shift-api
+    spec:
+      containers:
+        - image: felipetexa/shifts-api:0.0.1.RELEASE
+          imagePullPolicy: IfNotPresent
+          name: shifts-api
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 3
+  conditions:
+    - lastTransitionTime: '2023-03-03T23:46:49Z'
+      lastUpdateTime: '2023-03-03T23:46:51Z'
+      message: ReplicaSet "shift-api-68b76f7679" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: 'True'
+      type: Progressing
+    - lastTransitionTime: '2023-03-03T23:49:15Z'
+      lastUpdateTime: '2023-03-03T23:49:15Z'
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: 'True'
+      type: Available
+  observedGeneration: 2
+  readyReplicas: 3
+  replicas: 3
+  updatedReplicas: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    cloud.google.com/neg: '{"ingress":true}'
+  creationTimestamp: '2023-03-03T23:17:01Z'
+  finalizers:
+    - service.kubernetes.io/load-balancer-cleanup
+  labels:
+    app: shift-api
+  name: shift-api
+  namespace: default
+  resourceVersion: '76633'
+  uid: d7b16300-7cd9-4dab-b341-55fdb497757a
+spec:
+  allocateLoadBalancerNodePorts: true
+  clusterIP: 10.36.6.242
+  clusterIPs:
+    - 10.36.6.242
+  externalTrafficPolicy: Cluster
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+    - nodePort: 30987
+      port: 3001
+      protocol: TCP
+      targetPort: 3001
+  selector:
+    app: shift-api
+  sessionAffinity: None
+  type: LoadBalancer
+status:
+  loadBalancer:
+    ingress:
+      - ip: 35.202.82.147
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  creationTimestamp: '2023-03-03T23:48:58Z'
+  name: shift-api
+  namespace: default
+  resourceVersion: '107056'
+  uid: be9f2299-4850-4bc7-93e2-4bdf30ab5365
+spec:
+  maxReplicas: 10
+  metrics:
+    - resource:
+        name: cpu
+        target:
+          averageUtilization: 70
+          type: Utilization
+      type: Resource
+  minReplicas: 3
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: shift-api
+status:
+  conditions:
+    - lastTransitionTime: '2023-03-03T23:49:22Z'
+      message: recommended size matches current size
+      reason: ReadyForNewScale
+      status: 'True'
+      type: AbleToScale
+    - lastTransitionTime: '2023-03-04T00:18:30Z'
+      message: 'the HPA was unable to compute the replica count: no recommendation'
+      reason: FailedGetResourceMetric
+      status: 'False'
+      type: ScalingActive
+    - lastTransitionTime: '2023-03-03T23:49:22Z'
+      message: the desired count is within the acceptable range
+      reason: DesiredWithinRange
+      status: 'False'
+      type: ScalingLimited
+  currentMetrics:
+    - type: ''
+  currentReplicas: 3
+  desiredReplicas: 3
+  lastScaleTime: '2023-03-03T23:49:13Z'
