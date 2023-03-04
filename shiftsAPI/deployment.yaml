@@ -98,3 +98,48 @@ status:
   loadBalancer:
     ingress:
       - ip: 35.202.82.147
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  creationTimestamp: '2023-03-03T23:48:58Z'
+  name: shift-api
+  namespace: default
+  resourceVersion: '107056'
+  uid: be9f2299-4850-4bc7-93e2-4bdf30ab5365
+spec:
+  maxReplicas: 10
+  metrics:
+    - resource:
+        name: cpu
+        target:
+          averageUtilization: 70
+          type: Utilization
+      type: Resource
+  minReplicas: 3
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: shift-api
+status:
+  conditions:
+    - lastTransitionTime: '2023-03-03T23:49:22Z'
+      message: recommended size matches current size
+      reason: ReadyForNewScale
+      status: 'True'
+      type: AbleToScale
+    - lastTransitionTime: '2023-03-04T00:18:30Z'
+      message: 'the HPA was unable to compute the replica count: no recommendation'
+      reason: FailedGetResourceMetric
+      status: 'False'
+      type: ScalingActive
+    - lastTransitionTime: '2023-03-03T23:49:22Z'
+      message: the desired count is within the acceptable range
+      reason: DesiredWithinRange
+      status: 'False'
+      type: ScalingLimited
+  currentMetrics:
+    - type: ''
+  currentReplicas: 3
+  desiredReplicas: 3
+  lastScaleTime: '2023-03-03T23:49:13Z'
